@@ -5,6 +5,8 @@ class DHTModule
 private:
   uint pin;
   DHT *dht;
+
+public:
   float humidity = 0.0f;
   float temperature = 0.0f;
 

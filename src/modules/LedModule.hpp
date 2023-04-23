@@ -1,7 +1,7 @@
 #include "PinModule.hpp"
 class LedModule
 {
-private:
+public:
   PinModule *pin;
 
 public:

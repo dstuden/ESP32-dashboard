@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import LedComponentVue from "@/components/LedComponent.vue";
+import CommonCardComponent from "@/components/CommonCardComponent.vue";
 import DHTComponentVue from "@/components/DHTComponent.vue";
 import { dataStore } from "@/stores/dataStore";
 import { storeToRefs } from "pinia";
@@ -16,9 +16,6 @@ onMounted(() => {
   document.body.classList.add(theme.value);
 
   dataStore().fetchData();
-  setInterval(() => {
-    dataStore().fetchData();
-  }, 30000);
 });
 
 const changeTheme = () => {
@@ -44,17 +41,46 @@ const changeTheme = () => {
   </header>
 
   <main>
-    <LedComponentVue
-      name="Luč1"
-      :data="data.led1State"
-      :click="dataStore().toggleLed1"
-    ></LedComponentVue>
-    <LedComponentVue
-      name="Luč2"
-      :data="data.led2State"
-      :click="dataStore().toggleLed2"
-    ></LedComponentVue>
+    <CommonCardComponent
+      name="Heater"
+      :data="data.heater"
+      :click="dataStore().toggleHeater"
+      :disabled="dataStore().data.auto"
+    ></CommonCardComponent>
+    <CommonCardComponent
+      name="Humidifier"
+      :data="data.humidifier"
+      :click="dataStore().toggleHumidifier"
+      :disabled="dataStore().data.auto"
+    ></CommonCardComponent>
     <DHTComponentVue :data="data.dht"> </DHTComponentVue>
+    <CommonCardComponent
+      name="Auto"
+      :data="dataStore().data.auto"
+      :click="dataStore().toggleAuto"
+    ></CommonCardComponent>
+    <div class="card">
+      <h3>Temperature</h3>
+
+      <input
+        type="number"
+        min="0"
+        max="50"
+        step="1"
+        @change="dataStore().setTemperature"
+      />
+    </div>
+    <div class="card">
+      <h3>Humidity</h3>
+
+      <input
+        type="number"
+        min="0"
+        max="100"
+        step="1"
+        @change="dataStore().setHumidity"
+      />
+    </div>
   </main>
 </template>
 
@@ -104,5 +130,18 @@ header h1 {
 .theme-switcher svg {
   width: 80%;
   min-width: 20px;
+}
+
+.card input {
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 0.5rem;
+  border: 2px solid var(--accent);
+  border-radius: 10px;
+  outline: none;
+}
+
+.card h3 {
+  margin-bottom: 1rem;
 }
 </style>
